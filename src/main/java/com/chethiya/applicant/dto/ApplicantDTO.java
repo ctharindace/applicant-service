@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 
 @Data
 public class ApplicantDTO implements Serializable {
@@ -29,6 +30,8 @@ public class ApplicantDTO implements Serializable {
     private String complexion;
 
     private String eduQualificationGrade;
+
+    private Set<PassportDTO> passports;
 
 
 }

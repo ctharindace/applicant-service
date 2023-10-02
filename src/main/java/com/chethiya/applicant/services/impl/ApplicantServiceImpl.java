@@ -1,11 +1,16 @@
 package com.chethiya.applicant.services.impl;
 
 import com.chethiya.applicant.dto.ApplicantDTO;
+import com.chethiya.applicant.dto.PassportDTO;
+import com.chethiya.applicant.model.Passport;
 import com.chethiya.applicant.services.ApplicantService;
 import com.chethiya.applicant.dao.repositoryies.ApplicantRepository;
 import com.chethiya.applicant.model.Applicant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+
+import java.util.stream.Collectors;
 
 @Service
 public class ApplicantServiceImpl implements ApplicantService {
@@ -44,6 +49,9 @@ public class ApplicantServiceImpl implements ApplicantService {
             applicantDTO.setHeight(applicant.getHeight());
             applicantDTO.setComplexion(applicant.getComplexion());
             applicantDTO.setEduQualificationGrade(applicant.getEduQualificationGrade());
+            if (!CollectionUtils.isEmpty(applicant.getPassports())) {
+                applicantDTO.setPassports(applicant.getPassports().stream().map(ApplicantServiceImpl::getPassportDTO).collect(Collectors.toSet()));
+            }
         }
         return applicantDTO;
     }
@@ -61,6 +69,27 @@ public class ApplicantServiceImpl implements ApplicantService {
         applicant.setHeight(applicantDTO.getHeight());
         applicant.setComplexion(applicantDTO.getComplexion());
         applicant.setEduQualificationGrade(applicantDTO.getEduQualificationGrade());
+        if (!CollectionUtils.isEmpty(applicantDTO.getPassports())) {
+            applicant.setPassports(applicantDTO.getPassports().stream().map(ApplicantServiceImpl::getPassport).collect(Collectors.toSet()));
+        }
         return applicant;
+    }
+
+    private static Passport getPassport(PassportDTO passportDTO) {
+        Passport passport = new Passport();
+        passport.setPassportNumber(passportDTO.getPassportNumber());
+        passport.setDateOfExpiry(passportDTO.getDateOfExpiry());
+        passport.setCountryCodeOfIssue(passportDTO.getCountryCodeOfIssue());
+        passport.setDateOfIssue(passportDTO.getDateOfIssue());
+        return passport;
+    }
+
+    private static PassportDTO getPassportDTO(Passport passport) {
+        PassportDTO passportDTO = new PassportDTO();
+        passportDTO.setPassportNumber(passport.getPassportNumber());
+        passportDTO.setDateOfExpiry(passport.getDateOfExpiry());
+        passportDTO.setCountryCodeOfIssue(passport.getCountryCodeOfIssue());
+        passportDTO.setDateOfIssue(passport.getDateOfIssue());
+        return passportDTO;
     }
 }
