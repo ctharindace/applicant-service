@@ -7,6 +7,7 @@ import com.chethiya.applicant.services.ApplicantService;
 import com.chethiya.applicant.dao.repositoryies.ApplicantRepository;
 import com.chethiya.applicant.model.Applicant;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -17,6 +18,9 @@ public class ApplicantServiceImpl implements ApplicantService {
 
     @Autowired
     private ApplicantRepository applicantRepository;
+
+    @Autowired
+    private Environment environment;
 
     @Override
     public ApplicantDTO saveEntity(ApplicantDTO applicantDTO) {
@@ -35,7 +39,7 @@ public class ApplicantServiceImpl implements ApplicantService {
         return saveEntity(applicant);
     }
 
-    private static ApplicantDTO getApplicantDTO(Applicant applicant) {
+    private ApplicantDTO getApplicantDTO(Applicant applicant) {
         ApplicantDTO applicantDTO = new ApplicantDTO();
         if (applicant != null) {
             applicantDTO.setFirstName(applicant.getFirstName());
@@ -52,11 +56,12 @@ public class ApplicantServiceImpl implements ApplicantService {
             if (!CollectionUtils.isEmpty(applicant.getPassports())) {
                 applicantDTO.setPassports(applicant.getPassports().stream().map(ApplicantServiceImpl::getPassportDTO).collect(Collectors.toSet()));
             }
+            applicantDTO.setPort(environment.getProperty("local.server.port"));
         }
         return applicantDTO;
     }
 
-    private static Applicant getApplicant(ApplicantDTO applicantDTO) {
+    private Applicant getApplicant(ApplicantDTO applicantDTO) {
         Applicant applicant = new Applicant();
         applicant.setFirstName(applicantDTO.getFirstName());
         applicant.setLastName(applicantDTO.getLastName());
@@ -70,12 +75,12 @@ public class ApplicantServiceImpl implements ApplicantService {
         applicant.setComplexion(applicantDTO.getComplexion());
         applicant.setEduQualificationGrade(applicantDTO.getEduQualificationGrade());
         if (!CollectionUtils.isEmpty(applicantDTO.getPassports())) {
-            applicant.setPassports(applicantDTO.getPassports().stream().map(ApplicantServiceImpl::getPassport).collect(Collectors.toSet()));
+            applicant.setPassports(applicantDTO.getPassports().stream().map(this::getPassport).collect(Collectors.toSet()));
         }
         return applicant;
     }
 
-    private static Passport getPassport(PassportDTO passportDTO) {
+    private Passport getPassport(PassportDTO passportDTO) {
         Passport passport = new Passport();
         passport.setPassportNumber(passportDTO.getPassportNumber());
         passport.setDateOfExpiry(passportDTO.getDateOfExpiry());

@@ -2,6 +2,7 @@ package com.chethiya.applicant.controllers;
 
 import com.chethiya.applicant.services.CommonService;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +18,7 @@ public abstract class CommonController<DTO, ID> {
     }
 
     @ResponseBody
-    @RequestMapping(path = "/get/{code}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(path = "/get/{code}")
     public DTO get(@PathVariable(name = "code") ID id) {
         return getService().getEntity(id);
     }

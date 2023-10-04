@@ -33,5 +33,7 @@ public class ApplicantDTO implements Serializable {
 
     private Set<PassportDTO> passports;
 
+    private String port;
+
 
 }
