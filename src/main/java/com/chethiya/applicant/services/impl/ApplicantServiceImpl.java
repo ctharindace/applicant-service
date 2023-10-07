@@ -75,7 +75,7 @@ public class ApplicantServiceImpl implements ApplicantService {
         applicant.setComplexion(applicantDTO.getComplexion());
         applicant.setEduQualificationGrade(applicantDTO.getEduQualificationGrade());
         if (!CollectionUtils.isEmpty(applicantDTO.getPassports())) {
-            applicant.setPassports(applicantDTO.getPassports().stream().map(this::getPassport).collect(Collectors.toSet()));
+            applicantDTO.getPassports().forEach(pp -> applicant.addPassport(getPassport(pp)));
         }
         return applicant;
     }

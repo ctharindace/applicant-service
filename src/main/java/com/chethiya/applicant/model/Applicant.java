@@ -10,12 +10,16 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "APPLICANT_T_APPLICANT")
 public class Applicant {
@@ -35,13 +39,13 @@ public class Applicant {
     @Column(name = "LAST_NAME", length = 50)
     private String lastName;
 
-    @Column(name="GENDER")
+    @Column(name = "GENDER")
     private String gender;
 
     @Column(name = "DATE_OF_BIRTH")
     private Date dateOfBirth;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "applicant", targetEntity = Passport.class)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "applicant")
     private Set<Passport> passports;
 
     @Column(name = "MARITAL_STATUS")
@@ -61,5 +65,13 @@ public class Applicant {
 
     @Column(name = "EDU_QUALIFICATION_GRADE")
     private String eduQualificationGrade;
+
+    public void addPassport(Passport passport) {
+        if (CollectionUtils.isEmpty(this.passports)) {
+            passports = new HashSet<>();
+        }
+        passport.setApplicant(this);
+        passports.add(passport);
+    }
 
 }

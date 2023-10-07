@@ -1,6 +1,5 @@
 package com.chethiya.applicant.model;
 
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -11,11 +10,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
-import lombok.Data;
+
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "APPLICANT_T_PASSPORT")
 public class Passport {
@@ -27,7 +29,7 @@ public class Passport {
     private Integer passportId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(referencedColumnName = "APPLICANT_ID")
+    @JoinColumn(name = "APPLICANT_ID")
     private Applicant applicant;
 
     @Column(name = "PASSPORT_NO")
