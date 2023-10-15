@@ -14,7 +14,7 @@ spring:
         import: optional:configserver:http://localhost:8888/
     datasource:
         password: 1s@secret
-        url: jdbc:postgresql://localhost:5432/application_service
+        url: jdbc:postgresql://localhost:5432/application-service
         username: applicant_user
     jpa:
         hibernate:
@@ -25,3 +25,11 @@ spring:
                 dialect: org.hibernate.dialect.PostgreSQLDialect
                 format_sql: true
         show-sql: true
+
+management:
+    tracing:
+        sampling:
+            probability: 1.0
+logging:
+    pattern:
+        level: "[%5p [${spring.application.name}-#-%X{traceId}-#-%X{spanId}]]"
